@@ -1,3 +1,5 @@
 fastapi
 uvicorn
-pymorphy3
+python-docx
+requests
+python-multipart

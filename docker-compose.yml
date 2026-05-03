@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=10m
+    restart: always
+
+  ollama-init:
+    image: ollama/ollama
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: >
+      sh -c "
+      echo 'Waiting for Ollama...' &&
+      until ollama list > /dev/null 2>&1; do sleep 2; done &&
+      echo 'Pulling model if not exists...' &&
+      ollama pull qwen2.5:3b-instruct &&
+      echo 'Done'
+      "
+    restart: "no"
+
+  api:
+    build: .
+    container_name: text_api
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_URL=http://ollama:11434/api/generate
+      - MODEL_NAME=qwen2.5:3b-instruct
+    ports:
+      - "8000:8000"
+    restart: always
+
+volumes:
+  ollama_data:
