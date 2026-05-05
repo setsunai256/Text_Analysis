@@ -1,81 +1,56 @@
-# Text Analysis API
+Text Analysis API
 
-API для извлечения сущностей из `.docx` документов с использованием LLM (Ollama).
+Простой API для извлечения сущностей из .docx документов с использованием LLM (через Ollama).
 
-Извлекаются категории:
+Что извлекается:
 
-* `safety_equipment` — средства защиты
-* `tools` — инструменты
-* `measuring_devices` — измерительные приборы
+* safety_equipment — средства защиты
+* tools — инструменты
+* measuring_devices — измерительные приборы
 
----
+Запуск:
 
-## Быстрый запуск
-
-```bash
 git clone <repo-url>
 cd <repo>
 docker compose up --build
-```
 
-API:
+Эндпоинты:
 
-```
-http://localhost:8000
-```
+POST /extract — все категории
+POST /extract/safety — только СИЗ
+POST /extract/tools — только инструменты
+POST /extract/devices — только приборы
 
----
+Пример запроса:
 
-## Эндпоинты
+curl -X POST "http://localhost:8000/extract" 
+-F "file=@example.docx"
 
-* `POST /extract` — все категории
-* `POST /extract/safety` — только СИЗ
-* `POST /extract/tools` — только инструменты
-* `POST /extract/devices` — только приборы
+Конфигурация:
 
-Пример:
+OLLAMA_URL = http://ollama:11434/api/generate
+MODEL_NAME = qwen2.5:3b-instruct
 
-```bash
-curl -X POST "http://localhost:8000/extract" \
-  -F "file=@example.docx"
-```
+Модель и настройка:
 
----
+Используется модель qwen2.5:3b-instruct (загружается автоматически).
+При необходимости можно:
 
-## Конфигурация
+* заменить модель на более мощную через MODEL_NAME
+* изменить prompt в llm_service.py
 
-| Переменная | Значение по умолчанию            |
-| ---------- | -------------------------------- |
-| OLLAMA_URL | http://ollama:11434/api/generate |
-| MODEL_NAME | qwen2.5:3b-instruct              |
+Ограничения:
 
----
-
-## Модель и настройка
-
-* Используется `qwen2.5:3b-instruct` (загружается автоматически)
-* Можно заменить модель через `MODEL_NAME`
-* Prompt можно изменить в `llm_service.py` под свою предметную область
-
----
-
-## Ограничения
-
-* только `.docx`
-* до 5 MB
+* только .docx
 * качество зависит от модели
 
----
+Стек:
 
-## Стек
+FastAPI
+Ollama
+python-docx
+Docker
 
-* FastAPI
-* Ollama (LLM)
-* python-docx
-* Docker
-
----
-
-## Лицензия
+Лицензия:
 
 MIT
