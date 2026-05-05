@@ -24,6 +24,7 @@ docker compose up --build
 Конфигурация:
 
 OLLAMA_URL = http://ollama:11434/api/generate
+
 MODEL_NAME = qwen2.5:3b-instruct
 
 Модель и настройка:
