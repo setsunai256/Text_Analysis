@@ -16,15 +16,10 @@ docker compose up --build
 
 Эндпоинты:
 
-POST /extract — все категории
-POST /extract/safety — только СИЗ
-POST /extract/tools — только инструменты
-POST /extract/devices — только приборы
-
-Пример запроса:
-
-curl -X POST "http://localhost:8000/extract" 
--F "file=@example.docx"
+* POST /extract — все категории
+* POST /extract/safety — только СИЗ
+* POST /extract/tools — только инструменты
+* POST /extract/devices — только приборы
 
 Конфигурация:
 
